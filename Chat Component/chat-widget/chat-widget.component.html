@@ -1,0 +1,96 @@
+<!-- chat -->
+<div class="chat-cover" #draggableChat>
+  <button mat-raised-button color="primary" class="chat-btn" (click)="onToggleChatModal()" *ngIf="isRoleClient==false">
+    <i *ngIf="!showChatModal" class="fa fa-commenting-o" aria-hidden="true"></i>
+    <img *ngIf="showChatModal" width="15px" height="15px" class="chat-hideicon" src="../../../assets/img/chat-close.svg"
+      alt="" />
+  </button>
+  <button mat-raised-button color="primary" class="chat-btn-client" (click)="onToggleChatModal()" *ngIf="isRoleClient">
+    <i *ngIf="!showChatModal" class="fa fa-commenting-o" aria-hidden="true"></i>
+    <img *ngIf="showChatModal" width="15px" height="15px" class="chat-hideicon" src="../../../assets/img/chat-close.svg"
+      alt="" />
+  </button>
+  <div class="chat-box" [class.displayNone]="!showChatModal">
+
+    <div class="default-nav" id="nav" mwlDraggable [dragCursor]="'move'" (dragEnd)="onDragChat($event)"
+      [ghostDragEnabled]="false" (dragging)="onDragging()">
+      <img src="{{imgSource}}" alt="" class="fluid-img" />
+      <span *ngIf="isRoleClient==false">
+        <p class="main-nav-item-name" href="javascript:void(0)"> {{title}} </p>
+      </span>
+      <!-- <div class="row">-->
+      <div class="chat-select" *ngIf="isRoleClient">
+        <mat-form-field class="example-full-width">
+          <mat-select placeholder="Select Care Manager" [(ngModel)]="careManagerId" (selectionChange)="onCMSelect($event)"
+            matInput>
+            <mat-option *ngFor="let obj of masterStaffs" [value]="obj.id">
+              {{obj.value}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!-- </div>  -->
+
+    </div>
+
+
+    <div class="inner" id="inner">
+      <ng-scrollbar #scrollbar [autoUpdate]="false">
+        <div class="content" id="content" *ngIf="showChatModal">
+          <div *ngIf="pageNo < (meta && meta.totalPages)" class="message-wrapper client-chat text-center">
+            <div class="text-wrapper load-chat-msg" (click)="loadEarlierMessages()">
+              {{ loadingEarlierMsg ? 'Loading please wait...' : 'Show older messages' }}
+            </div>
+          </div>
+          <div *ngFor="let value of allMessageArray; let i = index">
+            <div class="date-phase" *ngIf="compareDate(value.chatDate, i)">
+              {{value.chatDateForWebApp | date}}
+            </div>
+            <app-message-item [value]="value"></app-message-item>
+          </div>
+        </div>
+      </ng-scrollbar>
+    </div>
+
+    <!-- <div class="send-chat" id="bottom">
+      <form (ngSubmit)="sendMessage($event, inputBox)">
+        <ng-container [ngSwitch]="isRoleClient">
+          <span *ngSwitchCase="false"> <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="input"
+              placeholder="Type a message" matInput #inputBox [(ngModel)]="message" name="message" id="message"
+              [disabled]="(careManagerId == '')"></textarea>
+            <button class="send" (click)="sendMessage($event, inputBox)"></button> </span>
+          <span *ngSwitchDefault> <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="input"
+              placeholder="Type a message" matInput #inputBox [(ngModel)]="message" name="message"
+              id="message"></textarea>
+            <button class="send" (click)="sendMessage($event, inputBox)"></button> </span>
+        </ng-container>
+
+      </form> 
+    </div> -->
+    <div class="send-chat" id="bottom">
+      <form (ngSubmit)="sendMessage($event, inputBox)">
+        <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="input" placeholder="Type a message"
+          matInput #inputBox [(ngModel)]="message" name="message" id="message" [disabled]="!isCMSelected" cdkAutosizeMinRows="1"
+          cdkAutosizeMaxRows="5" style="overflow-y: scroll;line-height: normal;"></textarea>
+        <button class="send" (click)="sendMessage($event, inputBox)"></button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- <ng-template #ghostElement>
+  <div class="chat-cover">
+    <button mat-raised-button color="primary" class="chat-btn">
+      <i *ngIf="!showChatModal" class="fa fa-commenting-o" aria-hidden="true"></i>
+      <img *ngIf="showChatModal" width="15px" height="15px" class="chat-hideicon"
+        src="../../../assets/img/chat-close.svg" alt="" />
+    </button>
+    <div class="chat-box">
+
+      <div class="default-nav" id="nav">
+        <img src="{{imgSource}}" alt="" class="fluid-img" />
+        <p class="main-nav-item-name" href="javascript:void(0)"> {{title}} </p>
+      </div>
+    </div>
+  </div>
+</ng-template> -->

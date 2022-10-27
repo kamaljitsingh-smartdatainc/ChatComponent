@@ -1,0 +1,23 @@
+<div class="message-wrapper" [ngClass]="{'client-chat text-left': !value.isRecieved, 'response-chat text-left': value.isRecieved }">
+
+  <div class="text-wrapper" *ngIf="value.message?.length > 0 &&  value.message.indexOf('(LinktoScheduler)') === -1 ">
+    <p>
+      {{value.message}}
+      <a *ngIf="value.patientCareGapID?.toString().length > 0 && value.isConfirmType == null && isChecked == false " color="primary" style="cursor:pointer; color:dodgerblue;" (click)="onConfirm(value.id,'Yes')">Yes / </a>
+      <a *ngIf="value.patientCareGapID?.toString().length > 0 && value.isConfirmType == null && isChecked == false " color="primary" style="cursor:pointer; color:dodgerblue;" (click)="onConfirm(value.id,'No')">No</a>
+      <a *ngIf="value.actionTypeId?.toString() == '6'" href={{link}}>please click here</a>
+    </p>
+
+    <span>{{ value.chatDateForWebApp | date:'h:mm a'}}</span>
+  </div>
+
+  <div class="text-wrapper" *ngIf="value.message?.length > 0 && value.message.includes('(LinktoScheduler)')">
+    <p>
+      {{value.message.replace('(LinktoScheduler)','')}}
+      <a href={{link}}>please click here</a>
+    </p>
+
+    <span>{{ value.chatDateForWebApp | date:'h:mm a'}}</span>
+  </div>
+
+</div>
